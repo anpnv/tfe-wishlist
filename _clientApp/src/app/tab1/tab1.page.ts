@@ -18,5 +18,10 @@ export class Tab1Page implements OnInit {
         console.log(res);
       });
     });
+
+
+    this.db.getOne('N2nNzQx5tZVfIPy3NsF8').subscribe(res => {
+      console.log(res);
+    })
   }
 }
