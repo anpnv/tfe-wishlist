@@ -8,11 +8,3 @@
 
 
 
-
-pour installer 
-
-> cd _client 
-> npm i
-
->cd server/functions
-> npm i
