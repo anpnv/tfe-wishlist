@@ -3,7 +3,6 @@ import * as admin from "firebase-admin";
 import { User } from "../models/user";
 
 const _db = admin.firestore();
-_db.settings({ ignoreUndefinedProperties: true });
 const _collection = _db.collection("users");
 
 export async function all(req: Request, res: Response) {
@@ -46,6 +45,27 @@ export async function create(req: Request, res: Response) {
   }
 }
 
+export async function update(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const { displayName, password, email, token, birthday } = req.body;
+    let user = await _collection.doc(id).set(
+      {
+        birthday: birthday,
+        displayName: displayName,
+        email: email,
+        password: password,
+        token: token,
+      },
+      { merge: true }
+    );
+
+    return res.status(204).send(user);
+  } catch (err) {
+    return handleError(res, err);
+  }
+}
+
 export async function get(req: Request, res: Response) {
   try {
     const { id } = req.params;
@@ -60,7 +80,7 @@ export async function remove(req: Request, res: Response) {
   try {
     const { id } = req.params;
     await _collection.doc(id).delete();
-    return res.status(204).send({});
+    return res.status(204).send(true);
   } catch (err) {
     return handleError(res, err);
   }
