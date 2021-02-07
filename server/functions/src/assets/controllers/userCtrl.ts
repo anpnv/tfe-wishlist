@@ -78,12 +78,14 @@ export async function get(req: Request, res: Response) {
 }
 
 export async function remove(req: Request, res: Response) {
-  try {
-    const { id } = req.params;
-    await _collection.doc(id).delete();
-    return res.status(204).send(true);
-  } catch (err) {
-    return handleError(res, err);
+  const { id } = req.params;
+  if ((await _collection.doc(id).get()).exists) {
+    return await _collection
+      .doc(id)
+      .delete()
+      .finally(() => res.status(204).send(true));
+  } else {
+    return res.status(500).send(false);
   }
 }
 

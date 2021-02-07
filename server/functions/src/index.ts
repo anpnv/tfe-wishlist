@@ -26,3 +26,4 @@ app.use(function (req, res, next) {
 routesConfig(app);
 
 export const api = functions.region("europe-west1").https.onRequest(app);
+
