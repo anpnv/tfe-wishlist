@@ -10,13 +10,14 @@ export async function all(req: Request, res: Response) {
     const userQuerySnapshot = await _collection.get();
     let users: User[] = [];
     userQuerySnapshot.forEach((doc) => {
+      const { birthday, displayName, email, password, token } = doc.data();
       users.push({
         id: doc.id,
-        birthday: doc.data().birthday,
-        displayName: doc.data().displayName,
-        email: doc.data().email,
-        password: doc.data().password,
-        token: doc.data().token,
+        birthday: birthday,
+        displayName: displayName,
+        email: email,
+        password: password,
+        token: token,
       });
     });
     return res.status(200).send(users);
@@ -88,4 +89,27 @@ export async function remove(req: Request, res: Response) {
 
 function handleError(res: Response, err: any) {
   return res.status(500).send({ message: `${err.code} - ${err.message}` });
+}
+
+// Authentication
+
+export async function manualSignIn(req: Request, res: Response) {
+  const { email, password } = req.body;
+  admin
+    .auth()
+    .createUser({
+      email: email,
+      emailVerified: false,
+      password: password,
+    })
+    .then((user) => {
+      _collection.doc(user.uid).set({
+        email: user.email,
+        id: user.uid,
+      });
+      return res.status(200).send(user);
+    })
+    .catch((err) => {
+      return handleError(res, err);
+    });
 }

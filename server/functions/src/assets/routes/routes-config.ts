@@ -14,6 +14,7 @@ export function routesConfig(app: Application) {
   app.delete("/user/:id", userCtrl.remove);
   app.post("/user", userCtrl.create);
   app.put("/user/:id", userCtrl.update);
+  app.post("/user/signIn", userCtrl.manualSignIn);
 
   // Product
   app.get("/products", productCtrl.all);
@@ -28,6 +29,6 @@ export function routesConfig(app: Application) {
   app.get("/list/:id", listCtrl.get);
   app.delete("/list/:id", listCtrl.remove);
   app.post("/list", listCtrl.create);
-  app.put("/list/:id", listCtrl.update);
   app.post("/participate", listCtrl.participate);
+  app.put("/list/:id", listCtrl.update);
 }
