@@ -1,9 +1,33 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>auth</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="container">
+  <form [formGroup]="loginForm">
+    <ion-item lines="full">
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="text" required formControlName="email"></ion-input>
+    </ion-item>
 
-<ion-content>
-  <ion-button (click)="deleteUser()"> click </ion-button>
-</ion-content>
+    <ion-item lines="full">
+      <ion-label position="floating">Password</ion-label>
+      <ion-input
+        type="password"
+        required
+        formControlName="password"
+      ></ion-input>
+    </ion-item>
+
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="signUp()" color="danger" expand="block"
+          >S'inscrire</ion-button
+        >
+      </ion-col>
+      <ion-col>
+        <ion-button (click)="signIn()" color="success" expand="block"
+          >Se connecter</ion-button
+        >
+      </ion-col>
+    </ion-row>
+    <a class="small-text" (click)="recoverPassword()">Forgot password?</a>
+
+    <a class="small-text" (click)="authService.logout()">Signout</a>
+  </form>
+</div>

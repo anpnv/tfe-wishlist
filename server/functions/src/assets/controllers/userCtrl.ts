@@ -93,9 +93,9 @@ function handleError(res: Response, err: any) {
   return res.status(500).send({ message: `${err.code} - ${err.message}` });
 }
 
-// Authentication
+// Inscription
 
-export async function manualSignIn(req: Request, res: Response) {
+export async function signUp(req: Request, res: Response) {
   const { email, password } = req.body;
   admin
     .auth()
@@ -115,3 +115,11 @@ export async function manualSignIn(req: Request, res: Response) {
       return handleError(res, err);
     });
 }
+
+// auth 
+
+export async function login(req: Request, res: Response) {
+
+  const {email, password} = req.body;
+}
+
