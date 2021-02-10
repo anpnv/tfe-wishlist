@@ -27,17 +27,24 @@ export class AuthService {
 
   private async handleRedirect() {
     if (this.currentUser) {
-      console.log('çapeu direct')
-      this.navCtrl.navigateForward('/tabs/home');
+      console.log('çapeu direct');
+      await this.navCtrl.navigateForward('/tabs/home');
     }
   }
 
-  uid() {
-    return true;
+
+
+  async uid() {
+    return this.auth.authState.subscribe(res => {
+      if (res) {
+        return res.uid;
+      }
+    });
+
   }
 
   login(email, password) {
-    this.auth
+    return this.auth
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
         const { displayName, email, uid } = user.user;
@@ -47,14 +54,11 @@ export class AuthService {
           email: email,
         };
         this.setToken(usr);
-        console.log('ok');
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+        
+      }).finally(() => this.handleRedirect());
   }
 
-  newUser(displayName, email, uid) {}
+  newUser(displayName, email, uid) { }
 
   signup(email, password) {
     return this.http
@@ -68,7 +72,9 @@ export class AuthService {
   }
 
   logout() {
-    this.auth.signOut();
+    this.auth.signOut().then(() => {
+      this.navCtrl.navigateRoot('/auth')
+    })
     sessionStorage.removeItem('currentUser');
     this.currentUser = null;
   }

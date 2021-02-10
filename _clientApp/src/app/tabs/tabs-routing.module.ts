@@ -10,9 +10,24 @@ const routes: Routes = [
       {
         path: 'home',
         loadChildren: () =>
-          import('../pages/home/home.module').then((m) => m.HomePageModule),
+          import('../pages/home/home.module').then((home) => home.HomePageModule),
       },
 
+      {
+        path: 'discovery',
+        loadChildren: () =>
+          import('../pages/discovery/discovery.module').then((discovery) => discovery.DiscoveryPageModule),
+      },
+      {
+        path: 'listes',
+        loadChildren: () =>
+          import('../pages/listes/listes.module').then((listes) => listes.ListesPageModule),
+      },
+      {
+        path: 'profile',
+        loadChildren: () =>
+          import('../pages/profile/profile.module').then((profile) => profile.ProfilePageModule),
+      },
       {
         path: '',
         redirectTo: '/tabs/home',
@@ -29,4 +44,4 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forChild(routes)],
 })
-export class TabsPageRoutingModule {}
+export class TabsPageRoutingModule { }

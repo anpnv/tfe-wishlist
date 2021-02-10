@@ -9,6 +9,7 @@ export class AuthGuard implements CanActivate {
   constructor(private auth: AuthService) {}
 
   async canActivate(): Promise<boolean> {
+
     const uid = await this.auth.uid();
     return !!uid;
   }

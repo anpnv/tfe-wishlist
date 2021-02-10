@@ -19,6 +19,7 @@ import { DatabaseService } from 'src/app/services/database.service';
 })
 export class AuthPage implements OnInit {
   loginForm: FormGroup;
+  err: string = '';
 
   constructor(
     private auth: AngularFireAuth,
@@ -43,7 +44,9 @@ export class AuthPage implements OnInit {
 
   signIn() {
     const { email, password } = this.loginForm.value;
-    this.authService.login(email, password);
+    this.authService.login(email, password).catch(error => {
+      this.err = error;
+    })
   }
 
   recoverPassword() {}

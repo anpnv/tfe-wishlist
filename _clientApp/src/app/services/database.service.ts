@@ -18,6 +18,7 @@ export class DatabaseService {
       .pipe(map((res) => res.map((u) => new User(u))));
   }
 
+  
   getOneUser(id: string) {
     this.http
       .get<User>(this.rootUrl + `user/${id}`)

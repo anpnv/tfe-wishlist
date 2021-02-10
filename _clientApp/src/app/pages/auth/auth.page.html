@@ -13,7 +13,9 @@
         formControlName="password"
       ></ion-input>
     </ion-item>
-
+    <ng-container *ngIf="err">
+        {{err}}
+    </ng-container>
     <ion-row>
       <ion-col>
         <ion-button (click)="signUp()" color="danger" expand="block"

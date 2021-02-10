@@ -1,12 +1,26 @@
 import { Component } from '@angular/core';
+import { IonRouterOutlet, ModalController } from '@ionic/angular';
+import { CreateListComponent } from '../components/create-list/create-list.component';
 
 @Component({
   selector: 'app-tabs',
   templateUrl: 'tabs.page.html',
-  styleUrls: ['tabs.page.scss']
+  styleUrls: ['tabs.page.scss'],
 })
 export class TabsPage {
+  constructor(private modalCtrl: ModalController, private routerOutlet: IonRouterOutlet,) { }
 
-  constructor() {}
 
+
+  async createList(isPrivate: boolean) {
+    const modal = await this.modalCtrl.create({
+      component: CreateListComponent,
+      swipeToClose: true,
+      presentingElement: this.routerOutlet.nativeEl,
+      componentProps: {
+        isPrivate: isPrivate
+      }
+    });
+    return await modal.present();
+  }
 }
