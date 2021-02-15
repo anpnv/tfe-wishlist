@@ -30,7 +30,6 @@ export class AuthPage implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    console.log(this.authService.currentUser);
   }
 
   initForm() {
@@ -44,9 +43,9 @@ export class AuthPage implements OnInit {
 
   signIn() {
     const { email, password } = this.loginForm.value;
-    this.authService.login(email, password).catch(error => {
+    this.authService.login(email, password).catch((error) => {
       this.err = error;
-    })
+    });
   }
 
   recoverPassword() {}
