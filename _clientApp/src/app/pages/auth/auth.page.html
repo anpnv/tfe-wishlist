@@ -13,9 +13,7 @@
         formControlName="password"
       ></ion-input>
     </ion-item>
-    <ng-container *ngIf="err">
-        {{err}}
-    </ng-container>
+    <ng-container *ngIf="err"> {{err}} </ng-container>
     <ion-row>
       <ion-col>
         <ion-button (click)="signUp()" color="danger" expand="block"
@@ -32,4 +30,8 @@
 
     <a class="small-text" (click)="authService.logout()">Signout</a>
   </form>
+
+  <ion-button (click)="authService.googleLogin()">
+test
+  </ion-button>
 </div>

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Wishlist</string>
+    <string name="title_activity_main">Wishlist</string>
+    <string name="package_name">com.wishlist.app</string>
+    <string name="custom_url_scheme">com.wishlist.app</string>
+    <string name="server_client_id">1048033589525-m33emjj5ofp995ku6vafonjivbqge5bh.apps.googleusercontent.com</string>
+</resources>

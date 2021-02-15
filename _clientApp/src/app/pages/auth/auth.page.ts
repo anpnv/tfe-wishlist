@@ -8,9 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { User } from 'src/app/classes/User';
 import { AuthService } from 'src/app/services/auth.service';
-import { DatabaseService } from 'src/app/services/database.service';
 
 @Component({
   selector: 'app-auth',

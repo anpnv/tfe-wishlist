@@ -1,0 +1,50 @@
+{
+  "project_info": {
+    "project_number": "1048033589525",
+    "firebase_url": "https://tfe-wishlist-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "tfe-wishlist",
+    "storage_bucket": "tfe-wishlist.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1048033589525:android:13262a05f050fd25c1d11c",
+        "android_client_info": {
+          "package_name": "com.wishlist.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1048033589525-m33emjj5ofp995ku6vafonjivbqge5bh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wishlist.app",
+            "certificate_hash": "3c812dc8cda7578c09699a4780102894d4e5d413"
+          }
+        },
+        {
+          "client_id": "1048033589525-m33emjj5ofp995ku6vafonjivbqge5bh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtDLNFiqArzcd8KZ3NdoDE-d1WDQ-335k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1048033589525-m33emjj5ofp995ku6vafonjivbqge5bh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+
+  
+}

@@ -4,6 +4,9 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { LoadingController, NavController } from '@ionic/angular';
 import { DatabaseService } from './database.service';
 
+import '@codetrix-studio/capacitor-google-auth';
+import { Plugins } from '@capacitor/core';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -77,5 +80,11 @@ export class AuthService {
         this.currentUser = usr;
       });
     }
+  }
+
+  async googleLogin(){
+    const googleUser = await Plugins.GoogleAuth.signIn();
+    console.log('user:', googleUser);
+   
   }
 }
