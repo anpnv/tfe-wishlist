@@ -18,7 +18,6 @@ export class DatabaseService {
       .pipe(map((res) => res.map((u) => new User(u))));
   }
 
-  
   getOneUser(id: string) {
     this.http
       .get<User>(this.rootUrl + `user/${id}`)
@@ -27,6 +26,27 @@ export class DatabaseService {
         map((u) => new User(u))
       )
       .toPromise();
+  }
+
+  getUserByemail(email: string) {
+    return this.http
+      .get<User>(this.rootUrl + `user/getByEmail/${email}`)
+      .pipe(
+        take(1),
+        map((u) => new User(u))
+      )
+      .toPromise();
+  }
+
+  signUp(email, password) {
+    return this.http
+      .post<User>(this.rootUrl + 'user/signIn', { email, password })
+      .pipe(
+        map((user) => {
+          user = new User(user);
+          return user;
+        })
+      );
   }
 
   deleteUser(id: string): Observable<boolean> {

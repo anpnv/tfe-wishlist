@@ -13,4 +13,9 @@ export class ProfilePage implements OnInit {
   ngOnInit() {
   }
 
+
+  handleClick(){
+    console.log(this.auth.currentUser);
+  }
+
 }

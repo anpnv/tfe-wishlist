@@ -11,6 +11,7 @@ export function routesConfig(app: Application) {
   // User
   app.get("/users", userCtrl.all);
   app.get("/user/:id", userCtrl.get);
+  app.get("/user/getByEmail/:email", userCtrl.getUserByEmail);
   app.delete("/user/:id", userCtrl.remove);
   app.post("/user", userCtrl.create);
   app.put("/user/:id", userCtrl.update);

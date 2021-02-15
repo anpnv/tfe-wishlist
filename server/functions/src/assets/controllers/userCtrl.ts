@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import * as admin from "firebase-admin";
+
 import { User } from "../models/user";
 
 const _db = admin.firestore();
@@ -77,6 +78,17 @@ export async function get(req: Request, res: Response) {
   }
 }
 
+export async function getUserByEmail(req: Request, res: Response) {
+  try {
+    const { email } = req.params;
+    const id = (await admin.auth().getUserByEmail(email)).uid;
+    const user = (await (await _collection.doc(id).get()).data()) as User;
+    return res.status(200).send(user);
+  } catch (err) {
+    return handleError(res, err);
+  }
+}
+
 export async function remove(req: Request, res: Response) {
   const { id } = req.params;
   if ((await _collection.doc(id).get()).exists) {
@@ -115,11 +127,3 @@ export async function signUp(req: Request, res: Response) {
       return handleError(res, err);
     });
 }
-
-// auth 
-
-export async function login(req: Request, res: Response) {
-
-  const {email, password} = req.body;
-}
-
