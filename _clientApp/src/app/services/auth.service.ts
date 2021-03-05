@@ -3,7 +3,6 @@ import { User } from '../classes/User';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { LoadingController, NavController } from '@ionic/angular';
 import { DatabaseService } from './database.service';
-
 import '@codetrix-studio/capacitor-google-auth';
 import { Plugins } from '@capacitor/core';
 
@@ -45,7 +44,7 @@ export class AuthService {
   async login(email, password) {
     const loading = await this.loadingCtrl.create({
       spinner: 'bubbles',
-      message: 'loading...',
+      message: 'Connexion en cours...',
     });
     loading.present();
     return this.auth
@@ -61,8 +60,25 @@ export class AuthService {
       });
   }
 
-  signup(email, password) {
-    this.db.signUp(email, password);
+  async signup(email, password, displayName) {
+    const loading = await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      message: 'Création de compte en cours...',
+    });
+    loading.present();
+    this.db.signUp(email, password, displayName).then(usr => {
+      if(usr) {
+        sessionStorage.setItem('currentUser', JSON.stringify(usr));
+        this.currentUser = usr;
+      }
+      
+    }).then(() => {
+      loading.dismiss().then(() => {
+
+        this.redirectHome();
+      });
+    });
+     
   }
 
   logout() {
@@ -73,9 +89,9 @@ export class AuthService {
     this.currentUser = null;
   }
 
-  async setToken(email: string) {
+  setToken(email: string) {
     if (email) {
-      await this.db.getUserByemail(email).then(async (usr) => {
+      this.db.getUserByemail(email).then(async (usr) => {
         sessionStorage.setItem('currentUser', JSON.stringify(usr));
         this.currentUser = usr;
       });
@@ -84,7 +100,22 @@ export class AuthService {
 
   async googleLogin(){
     const googleUser = await Plugins.GoogleAuth.signIn();
-    console.log('user:', googleUser);
-   
+
+
+    
+
+    
+
+
+
+    
+    const user ={
+      displayName: googleUser.givenName + " " + googleUser.familyName,
+      email: googleUser.email,
+    }
+
+
+
+    console.log("userObject",user);
   }
 }

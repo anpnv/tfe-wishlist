@@ -37,7 +37,10 @@ export class AuthPage implements OnInit {
     });
   }
 
-  signUp() {}
+  signUp() {
+    const { email, password } = this.loginForm.value;
+    this.authService.signup(email, password, "test");
+  }
 
   signIn() {
     const { email, password } = this.loginForm.value;

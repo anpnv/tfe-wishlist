@@ -28,8 +28,8 @@ export class DatabaseService {
       .toPromise();
   }
 
-  getUserByemail(email: string) {
-    return this.http
+  async getUserByemail(email: string) {
+    return await this.http
       .get<User>(this.rootUrl + `user/getByEmail/${email}`)
       .pipe(
         take(1),
@@ -38,15 +38,17 @@ export class DatabaseService {
       .toPromise();
   }
 
-  signUp(email, password) {
-    return this.http
-      .post<User>(this.rootUrl + 'user/signIn', { email, password })
+  async signUp(email,password,displayName) {
+    return await this.http
+      .post<User>(this.rootUrl + 'user/signUp', {email, password, displayName })
       .pipe(
         map((user) => {
-          user = new User(user);
-          return user;
+          let usr;
+          usr = new User(user);
+          return usr;
+         
         })
-      );
+      ).toPromise();
   }
 
   deleteUser(id: string): Observable<boolean> {
