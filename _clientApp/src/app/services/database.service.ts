@@ -51,6 +51,11 @@ export class DatabaseService {
       ).toPromise();
   }
 
+  async signUpWithProvider(email, displayName, uid) {
+    return await this.http
+      .post<User>(this.rootUrl+'user/signUpProvider', {email, displayName, uid}).subscribe();
+  }
+
   deleteUser(id: string): Observable<boolean> {
     return this.http.delete<boolean>(`${this.rootUrl}user/${id}`).pipe(
       map((res) => true),

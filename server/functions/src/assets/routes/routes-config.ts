@@ -16,6 +16,7 @@ export function routesConfig(app: Application) {
   app.post("/user", userCtrl.create);
   app.put("/user/:id", userCtrl.update);
   app.post("/user/signUp", userCtrl.signUp);
+  app.post("/user/signUpProvider", userCtrl.signUpWithProvider);
 
   // Product
   app.get("/products", productCtrl.all);

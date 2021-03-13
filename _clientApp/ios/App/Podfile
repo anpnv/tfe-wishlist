@@ -11,10 +11,15 @@ def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
   pod 'CodetrixStudioCapacitorGoogleAuth', :path => '../../node_modules/@codetrix-studio/capacitor-google-auth'
+  pod 'CapacitorFirebaseAuth', :path => '../../node_modules/capacitor-firebase-auth'
   # Do not delete
 end
 
 target 'App' do
   capacitor_pods
   # Add your Pods here
+    pod 'Firebase/Core'
+    pod 'Firebase/Auth'
+    pod 'FBSDKCoreKit'
+    pod 'FBSDKLoginKit'
 end

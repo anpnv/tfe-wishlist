@@ -7,6 +7,32 @@
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 0
+    },
+    "GoogleAuth": {
+      "scopes": ["profile", "email"],
+      "serverClientId": "1048033589525-m33emjj5ofp995ku6vafonjivbqge5bh.apps.googleusercontent.com",
+      "forceCodeForRefreshToken": true
+    }, 
+    "CapacitorFirebaseAuth": {
+      "providers": [
+        "google.com",
+        "facebook.com",
+        "phone"
+      ],
+      "languageCode": "en",
+      "nativeAuth": false,
+      "permissions": {
+        "google": [
+          "profile"
+        ]
+      }
+    },
+    "PushNotification": {
+      "presentationOptions": [
+        "badge",
+        "sound",
+        "alert"
+      ]
     }
   },
   "cordova": {}

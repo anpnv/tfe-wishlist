@@ -6,6 +6,13 @@ import { DatabaseService } from './database.service';
 import '@codetrix-studio/capacitor-google-auth';
 import { Plugins } from '@capacitor/core';
 
+import {
+  cfaSignIn,
+  cfaSignInGoogle,
+  cfaSignOut,
+  SignInResult,
+} from 'capacitor-firebase-auth';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -57,6 +64,9 @@ export class AuthService {
         loading.dismiss().then(() => {
           this.redirectHome();
         });
+      }).catch(err => {
+        console.log(err);
+        loading.dismiss();
       });
   }
 
@@ -66,22 +76,20 @@ export class AuthService {
       message: 'Création de compte en cours...',
     });
     loading.present();
-    this.db.signUp(email, password, displayName).then(usr => {
-      if(usr) {
-        sessionStorage.setItem('currentUser', JSON.stringify(usr));
-        this.currentUser = usr;
-      }
-      
-    }).then(() => {
-      loading.dismiss().then(() => {
-
-        this.redirectHome();
+    this.db
+      .signUp(email, password, displayName)
+      .then((usr) => {
+        if (usr) this.setToken(email);
+      })
+      .then(() => {
+        loading.dismiss().then(() => {
+          this.redirectHome();
+        });
       });
-    });
-     
   }
 
   logout() {
+    cfaSignOut().subscribe();
     this.auth.signOut().then(() => {
       this.navCtrl.navigateRoot('/auth');
     });
@@ -95,27 +103,49 @@ export class AuthService {
         sessionStorage.setItem('currentUser', JSON.stringify(usr));
         this.currentUser = usr;
       });
+
     }
   }
 
-  async googleLogin(){
-    const googleUser = await Plugins.GoogleAuth.signIn();
+  async googleLogin() {
+    const loading = await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      message: 'Création de compte en cours...',
+    });
+    loading.present();
+    cfaSignIn('google.com').subscribe((res) => {
+      const { email, displayName, uid } = res;
+      this.db
+        .signUpWithProvider(email, displayName, uid)
+        .then((usr) => {
+          if (usr) this.setToken(email);
+        })
+        .then(() => {
+          loading.dismiss().then(() => {
+            this.redirectHome();
+          });
+        });
+    });
+  }
 
-
-    
-
-    
-
-
-
-    
-    const user ={
-      displayName: googleUser.givenName + " " + googleUser.familyName,
-      email: googleUser.email,
-    }
-
-
-
-    console.log("userObject",user);
+  async facebookLogin() {
+    const loading = await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      message: 'Création de compte en cours...',
+    });
+    loading.present();
+    cfaSignIn('facebook.com').subscribe((res) => {
+      const { email, displayName, uid } = res;
+      this.db
+        .signUpWithProvider(email, displayName, uid)
+        .then((usr) => {
+          if (usr) this.setToken(email);
+        })
+        .then(() => {
+          loading.dismiss().then(() => {
+            this.redirectHome();
+          });
+        });
+    });
   }
 }

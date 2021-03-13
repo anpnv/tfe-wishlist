@@ -11,13 +11,12 @@ export async function all(req: Request, res: Response) {
     const userQuerySnapshot = await _collection.get();
     let users: User[] = [];
     userQuerySnapshot.forEach((doc) => {
-      const { birthday, displayName, email, password, token } = doc.data();
+      const { birthday, displayName, email, token } = doc.data();
       users.push({
-        id: doc.id,
+        uid: doc.id,
         birthday: birthday,
         displayName: displayName,
         email: email,
-        password: password,
         token: token,
       });
     });
@@ -29,16 +28,15 @@ export async function all(req: Request, res: Response) {
 
 export async function create(req: Request, res: Response) {
   try {
-    const { birthday, displayName, email, password, token } = req.body;
+    const { birthday, displayName, email, token } = req.body;
     const newUser = {
       birthday: birthday,
       displayName: displayName,
       email: email,
-      password: password,
       token: token,
     };
     await _collection.add(newUser).then((doc) => {
-      doc.set({ id: doc.id }, { merge: true });
+      doc.set({ uid: doc.id }, { merge: true });
     });
 
     return res.status(201).send(true);
@@ -49,14 +47,13 @@ export async function create(req: Request, res: Response) {
 
 export async function update(req: Request, res: Response) {
   try {
-    const { id } = req.params;
-    const { displayName, password, email, token, birthday } = req.body;
-    let user = await _collection.doc(id).set(
+    const { uid } = req.params;
+    const { displayName, email, token, birthday } = req.body;
+    let user = await _collection.doc(uid).set(
       {
         birthday: birthday,
         displayName: displayName,
         email: email,
-        password: password,
         token: token,
       },
       { merge: true }
@@ -70,8 +67,8 @@ export async function update(req: Request, res: Response) {
 
 export async function get(req: Request, res: Response) {
   try {
-    const { id } = req.params;
-    const user = (await (await _collection.doc(id).get()).data()) as User;
+    const { uid } = req.params;
+    const user = (await (await _collection.doc(uid).get()).data()) as User;
     return res.status(200).send(user);
   } catch (err) {
     return handleError(res, err);
@@ -81,8 +78,8 @@ export async function get(req: Request, res: Response) {
 export async function getUserByEmail(req: Request, res: Response) {
   try {
     const { email } = req.params;
-    const id = (await admin.auth().getUserByEmail(email)).uid;
-    const user = (await (await _collection.doc(id).get()).data()) as User;
+    const uid = (await admin.auth().getUserByEmail(email)).uid;
+    const user = (await (await _collection.doc(uid).get()).data()) as User;
     return res.status(200).send(user);
   } catch (err) {
     return handleError(res, err);
@@ -90,10 +87,10 @@ export async function getUserByEmail(req: Request, res: Response) {
 }
 
 export async function remove(req: Request, res: Response) {
-  const { id } = req.params;
-  if ((await _collection.doc(id).get()).exists) {
+  const { uid } = req.params;
+  if ((await _collection.doc(uid).get()).exists) {
     return await _collection
-      .doc(id)
+      .doc(uid)
       .delete()
       .finally(() => res.status(204).send(true));
   } else {
@@ -108,22 +105,52 @@ function handleError(res: Response, err: any) {
 // Inscription
 
 export async function signUp(req: Request, res: Response) {
-  const { email, password } = req.body;
+  const { email, password, displayName } = req.body;
   admin
     .auth()
     .createUser({
       email: email,
       emailVerified: false,
+      displayName: displayName,
       password: password,
     })
     .then((user) => {
       _collection.doc(user.uid).set({
         email: user.email,
-        id: user.uid,
+        uid: user.uid,
+        displayName: user.displayName,
       });
-      return res.status(200).send(user);
+      return res.status(201).send(user);
     })
     .catch((err) => {
       return handleError(res, err);
     });
+}
+
+export async function signUpWithProvider(req: Request, res: Response) {
+  try {
+    const { email, displayName, uid } = req.body;
+    await _collection
+      .doc(uid)
+      .get()
+      .then(async (doc) => {
+        if (!doc.exists) {
+          const user = _collection.doc(uid).set({
+            email: email,
+            uid: uid,
+            displayName: displayName,
+            token: "",
+            birthday: "",
+          });
+          return res.status(201).send(user);
+        } else {
+          return  res.status(200).send(doc);
+        }
+      });
+
+      return res.status(200);
+    
+  } catch (err) {
+    return handleError(res, err);
+  }
 }

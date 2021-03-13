@@ -5,4 +5,6 @@
     <string name="package_name">com.wishlist.app</string>
     <string name="custom_url_scheme">com.wishlist.app</string>
     <string name="server_client_id">1048033589525-m33emjj5ofp995ku6vafonjivbqge5bh.apps.googleusercontent.com</string>
+  <string name="facebook_app_id">127825745808456</string>
+  <string name="fb_login_protocol_scheme">fb127825745808456://authorize</string>
 </resources>
