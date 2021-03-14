@@ -18,6 +18,8 @@ export async function all(req: Request, res: Response) {
         authorId: doc.data().authorId,
         isEnable: doc.data().isEnable,
         name: doc.data().name,
+        messages: doc.data().name,
+        products: doc.data().products,
       });
     });
     return res.status(200).send(lists);
@@ -26,19 +28,38 @@ export async function all(req: Request, res: Response) {
   }
 }
 
+export async function participateToPot(req: Request, res: Response) {
+  try {
+    const { id, pot } = req.body;
+    _collection.doc(id).set({
+      pot: pot
+    }, {merge: true})
+    return res.status(202).send(true);
+  } catch (err) {
+    return handleError(res, err);
+  }
+}
+
+
+
 export async function create(req: Request, res: Response) {
   try {
-    const { name, isPublic, date, pot, authorId } = req.body;
+    const { name, date, authorId } = req.body;
     const newList = {
-      isPublic: isPublic, 
+      isPublic: true,
       date: date,
-      pot: pot,
+      pot: 0,
       authorId: authorId,
       isEnable: true,
       name: name,
+      products: [],
+      messages: [],
     };
-    await _collection.add(newList).then((doc) => {
-      doc.set({ id: doc.id }, { merge: true });
+    await _collection.add(newList).then(async(doc) => {
+      await doc.set({ id: doc.id }, { merge: true });
+      await doc.get().then(async elem => {
+        return await res.status(201).send(elem.data());
+      })
     });
     return res.status(201).send(true);
   } catch (err) {
@@ -65,23 +86,18 @@ export async function participate(req: Request, res: Response) {
   }
 }
 
-
 export async function update(req: Request, res: Response) {
   try {
     const { id } = req.params;
-    const { name, isPublic, date, pot, isEnable } = req.body;
-    let user = await _collection.doc(id).set(
+    const { name, date } = req.body;
+    await _collection.doc(id).set(
       {
-        isPublic: isPublic,
         date: date,
-        pot: pot,
-        isEnable: isEnable,
         name: name,
       },
       { merge: true }
     );
-
-    return res.status(204).send(user);
+    return res.status(202).send(true);
   } catch (err) {
     return handleError(res, err);
   }

@@ -6,60 +6,30 @@ import { User } from "../models/user";
 const _db = admin.firestore();
 const _collection = _db.collection("users");
 
-export async function all(req: Request, res: Response) {
-  try {
-    const userQuerySnapshot = await _collection.get();
-    let users: User[] = [];
-    userQuerySnapshot.forEach((doc) => {
-      const { birthday, displayName, email, token } = doc.data();
-      users.push({
-        uid: doc.id,
-        birthday: birthday,
-        displayName: displayName,
-        email: email,
-        token: token,
-      });
-    });
-    return res.status(200).send(users);
-  } catch (err) {
-    return handleError(res, err);
-  }
-}
-
-export async function create(req: Request, res: Response) {
-  try {
-    const { birthday, displayName, email, token } = req.body;
-    const newUser = {
-      birthday: birthday,
-      displayName: displayName,
-      email: email,
-      token: token,
-    };
-    await _collection.add(newUser).then((doc) => {
-      doc.set({ uid: doc.id }, { merge: true });
-    });
-
-    return res.status(201).send(true);
-  } catch (err) {
-    return handleError(res, err);
-  }
-}
-
 export async function update(req: Request, res: Response) {
   try {
     const { uid } = req.params;
-    const { displayName, email, token, birthday } = req.body;
-    let user = await _collection.doc(uid).set(
-      {
-        birthday: birthday,
-        displayName: displayName,
+    const { displayName, token, birthday, email, password } = req.body;
+    admin
+      .auth()
+      .updateUser(uid, {
         email: email,
-        token: token,
-      },
-      { merge: true }
-    );
+        displayName: displayName,
+        password: password,
+      })
+      .then(() => {
+        _collection.doc(uid).set(
+          {
+            birthday: birthday,
+            displayName: displayName,
+            token: token,
+            email: email,
+          },
+          { merge: true }
+        );
+      });
 
-    return res.status(204).send(user);
+    return res.status(202).send(true);
   } catch (err) {
     return handleError(res, err);
   }
@@ -98,10 +68,6 @@ export async function remove(req: Request, res: Response) {
   }
 }
 
-function handleError(res: Response, err: any) {
-  return res.status(500).send({ message: `${err.code} - ${err.message}` });
-}
-
 // Inscription
 
 export async function signUp(req: Request, res: Response) {
@@ -115,10 +81,16 @@ export async function signUp(req: Request, res: Response) {
       password: password,
     })
     .then((user) => {
-      _collection.doc(user.uid).set({
-        email: user.email,
-        uid: user.uid,
-        displayName: user.displayName,
+      createPrivateList(user.uid).then((doc) => {
+        _collection.doc(user.uid).set({
+          email: user.email,
+          uid: user.uid,
+          displayName: user.displayName,
+          birthday: "",
+          privateList: doc.id,
+          publicLists: [],
+          token: "",
+        });
       });
       return res.status(201).send(user);
     })
@@ -135,22 +107,58 @@ export async function signUpWithProvider(req: Request, res: Response) {
       .get()
       .then(async (doc) => {
         if (!doc.exists) {
-          const user = _collection.doc(uid).set({
-            email: email,
-            uid: uid,
-            displayName: displayName,
-            token: "",
-            birthday: "",
-          });
+          let user;
+          createPrivateList(uid)
+            .then((doc) => {
+              user = _collection.doc(uid).set({
+                email: email,
+                uid: uid,
+                displayName: displayName,
+                token: "",
+                birthday: "",
+                privateList: doc.id,
+                publicLists: [],
+              });
+              return user;
+            })
+            .finally(() => {
+              admin.auth().updateUser(uid, {
+                emailVerified: true,
+              });
+            });
+
           return res.status(201).send(user);
         } else {
-          return  res.status(200).send(doc);
+          return res.status(200).send(doc);
         }
       });
 
-      return res.status(200);
-    
+    return res.status(200);
   } catch (err) {
     return handleError(res, err);
   }
+}
+
+async function createPrivateList(uid: string) {
+  return await _db
+    .collection("lists")
+    .add({
+      isPublic: false,
+      date: null,
+      pot: null,
+      authorId: uid,
+      isEnable: true,
+      name: "Ma liste privée",
+      products: [],
+      participants: null,
+      messages: null,
+    })
+    .then((doc) => {
+      doc.set({ id: doc.id }, { merge: true });
+      return doc;
+    });
+}
+
+function handleError(res: Response, err: any) {
+  return res.status(500).send({ message: `${err.code} - ${err.message}` });
 }

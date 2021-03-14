@@ -8,13 +8,13 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 
-
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
+import { CreateListComponent } from './components/create-list/create-list.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, CreateListComponent],
   entryComponents: [],
   imports: [
     BrowserModule,

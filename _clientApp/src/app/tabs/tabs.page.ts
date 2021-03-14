@@ -12,15 +12,19 @@ export class TabsPage {
 
 
 
-  async createList(isPrivate: boolean) {
+  async createList() {
     const modal = await this.modalCtrl.create({
       component: CreateListComponent,
       swipeToClose: true,
       presentingElement: this.routerOutlet.nativeEl,
       componentProps: {
-        isPrivate: isPrivate
+          // nothing for now
       }
     });
     return await modal.present();
+  }
+
+  async createProduct() {
+    console.log('clicekd"');
   }
 }

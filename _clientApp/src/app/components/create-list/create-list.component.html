@@ -1,7 +1,36 @@
-<p>
-  {{isPrivate}}
-  <br>
-  create-list works!
+<ion-toolbar>
+  <ion-buttons slot="end">
+    <ion-button (click)="dismiss()"> 
+      <ion-icon name="close-circle" ></ion-icon>
+    </ion-button>
+  </ion-buttons>
+  <ion-title>Créer une liste</ion-title>
+</ion-toolbar>
 
-</p>
+<ion-content> 
 
+
+
+<form [formGroup]="createList">
+  <ion-item>
+    <ion-label position="floating">Nom de la liste</ion-label>
+    <ion-input formControlName="name"></ion-input>
+  </ion-item> 
+
+  <ion-item >
+    <ion-label position="floating">Date</ion-label>
+    <ion-input formControlName="date"></ion-input>
+  </ion-item> 
+  <ion-button (click)="submit()"> submit</ion-button>
+  
+</form>
+
+
+
+
+
+
+
+
+
+</ion-content>

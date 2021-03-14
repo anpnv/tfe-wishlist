@@ -1,14 +1,21 @@
+import { Message } from "@angular/compiler/src/i18n/i18n_ast";
+import { Product } from "./product";
+import { User } from "./User";
+
 export class List {
-  id: string;
+  id: String;
   isPublic: boolean;
-  date: string;
+  date: String;
   pot: number;
-  authorId: string;
+  authorId: String;
   isEnable: boolean;
-  name: string;
+  name: String;
+  products: [];
+  messages: [];
 
   constructor(data: List) {
-    const { id, isPublic, date, pot, authorId, isEnable, name } = data;
+    console.log(data);
+    const { id, isPublic, date, pot, authorId, isEnable, name, products, messages } = data;
     this.id = id;
     this.isPublic = isPublic;
     this.date = date;
@@ -16,5 +23,7 @@ export class List {
     this.authorId = authorId;
     this.isEnable = isEnable;
     this.name = name;
+    this.products = products;
+    this.messages = messages;
   }
 }

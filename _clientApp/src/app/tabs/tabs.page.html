@@ -2,38 +2,31 @@
   <ion-tab-bar slot="bottom">
     <ion-tab-button tab="home">
       <ion-icon name="home"></ion-icon>
-
     </ion-tab-button>
-
     <ion-tab-button tab="discovery">
       <ion-icon name="albums"></ion-icon>
-
     </ion-tab-button>
     <ion-tab-button></ion-tab-button>
     <ion-tab-button tab="listes">
       <ion-icon name="list"></ion-icon>
-
     </ion-tab-button>
     <ion-tab-button tab="profile">
       <ion-icon name="person"></ion-icon>
-
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>
-
 <ion-fab vertical="bottom" horizontal="center" slot="fixed" edge="false">
   <ion-fab-button type="button">
     <ion-icon name="gift"></ion-icon>
   </ion-fab-button>
-
-  <ion-fab-list side="top" style="margin-left: -50px">
-    <ion-fab-button type="button" color="dark" (click)="createList(true)">
-      <ion-icon name="lock-closed"></ion-icon>
+  <ion-fab-list side="top" style="margin-left: -40px">
+    <ion-fab-button type="button" color="dark" (click)="createProduct()">
+      <ion-icon name="shirt"></ion-icon>
     </ion-fab-button>
   </ion-fab-list>
-  <ion-fab-list side="top" style="margin-left: 50px">
-    <ion-fab-button type="button" color="dark" (click)="createList(false)">
-      <ion-icon name="people"></ion-icon>
+  <ion-fab-list side="top" style="margin-left: 40px">
+    <ion-fab-button type="button" color="dark" (click)="createList()">
+      <ion-icon name="list-circle"></ion-icon>
     </ion-fab-button>
   </ion-fab-list>
 </ion-fab>

@@ -9,11 +9,9 @@ export function routesConfig(app: Application) {
   });
 
   // User
-  app.get("/users", userCtrl.all);
   app.get("/user/:id", userCtrl.get);
   app.get("/user/getByEmail/:email", userCtrl.getUserByEmail);
   app.delete("/user/:id", userCtrl.remove);
-  app.post("/user", userCtrl.create);
   app.put("/user/:id", userCtrl.update);
   app.post("/user/signUp", userCtrl.signUp);
   app.post("/user/signUpProvider", userCtrl.signUpWithProvider);
@@ -33,4 +31,6 @@ export function routesConfig(app: Application) {
   app.post("/list", listCtrl.create);
   app.post("/participate", listCtrl.participate);
   app.put("/list/:id", listCtrl.update);
+
+  app.post('participatePot', listCtrl.participateToPot);
 }

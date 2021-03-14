@@ -4,4 +4,6 @@ export interface User {
   email?: String;
   birthday?: String;
   token?: String;
+  privateList?: number;
+  publicLists?: [];
 }

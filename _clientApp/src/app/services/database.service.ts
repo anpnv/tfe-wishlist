@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { User } from '../classes/User';
 import { map, take, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
+import { List } from '../classes/list';
 
 @Injectable({
   providedIn: 'root',
@@ -38,22 +39,31 @@ export class DatabaseService {
       .toPromise();
   }
 
-  async signUp(email,password,displayName) {
+  async signUp(email, password, displayName) {
     return await this.http
-      .post<User>(this.rootUrl + 'user/signUp', {email, password, displayName })
+      .post<User>(this.rootUrl + 'user/signUp', {
+        email,
+        password,
+        displayName,
+      })
       .pipe(
         map((user) => {
           let usr;
           usr = new User(user);
           return usr;
-         
         })
-      ).toPromise();
+      )
+      .toPromise();
   }
 
   async signUpWithProvider(email, displayName, uid) {
     return await this.http
-      .post<User>(this.rootUrl+'user/signUpProvider', {email, displayName, uid}).subscribe();
+      .post<User>(this.rootUrl + 'user/signUpProvider', {
+        email,
+        displayName,
+        uid,
+      })
+      .subscribe();
   }
 
   deleteUser(id: string): Observable<boolean> {
@@ -63,6 +73,16 @@ export class DatabaseService {
         console.error(err);
         return of(false);
       })
+    );
+  }
+
+  createList(list): Observable<List> {
+    const {date, authorId, name} = list;
+    return this.http.post<List>(this.rootUrl + 'list', {
+      date, authorId, name
+    }).pipe(
+      take(1),
+      map((l) => new List(l))
     );
   }
 }

@@ -6,4 +6,6 @@ export interface List {
   authorId: string;
   isEnable: boolean;
   name: string;
+  products: [];
+  messages: [];
 }
