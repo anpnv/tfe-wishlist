@@ -1,0 +1,10 @@
+<ion-item *ngIf="product | async as p" lines="none" (click)="open()">
+  <ion-avatar slot="start">
+    <img src="../../../assets/img/gift.svg">
+  </ion-avatar>
+  <ion-label>
+    <h2>{{p.name}}</h2>
+    <h3>{{p.price}} €</h3>
+    <p>{{p.details}}</p>
+  </ion-label>
+</ion-item>

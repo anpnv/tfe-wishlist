@@ -3,10 +3,18 @@
 
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Liste privée</ion-card-title>
+
+      <ion-item lines="none">
+        <ion-card-title>Liste privée</ion-card-title>
+        <ion-button fill="outline" slot="end"><ion-icon name="add"></ion-icon></ion-button>
+      </ion-item>
+      
+     
     </ion-card-header>
-    <ion-card-content>
-     <img src="../../../assets/img/wishlist.svg" /> 
+    <ion-card-content *ngIf="privateList | async  as list">
+      <ion-list *ngFor="let product of list.products">
+        <app-product-line [id]="product"></app-product-line>
+      </ion-list>
     </ion-card-content>
   </ion-card>
 

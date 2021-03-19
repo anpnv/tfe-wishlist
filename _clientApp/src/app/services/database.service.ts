@@ -4,6 +4,7 @@ import { User } from '../classes/User';
 import { map, take, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { List } from '../classes/list';
+import { Product } from '../classes/product';
 
 @Injectable({
   providedIn: 'root',
@@ -29,8 +30,8 @@ export class DatabaseService {
       .toPromise();
   }
 
-  async getUserByemail(email: string) {
-    return await this.http
+  getUserByemail(email: string) {
+    return this.http
       .get<User>(this.rootUrl + `user/getByEmail/${email}`)
       .pipe(
         take(1),
@@ -66,7 +67,7 @@ export class DatabaseService {
       .subscribe();
   }
 
-  deleteUser(id: string): Observable<boolean> {
+  deleteUser(id): Observable<boolean> {
     return this.http.delete<boolean>(`${this.rootUrl}user/${id}`).pipe(
       map((res) => true),
       catchError((err) => {
@@ -77,12 +78,34 @@ export class DatabaseService {
   }
 
   createList(list): Observable<List> {
-    const {date, authorId, name} = list;
-    return this.http.post<List>(this.rootUrl + 'list', {
-      date, authorId, name
-    }).pipe(
-      take(1),
-      map((l) => new List(l))
-    );
+    const { date, authorId, name } = list;
+    return this.http
+      .post<List>(this.rootUrl + 'list', {
+        date,
+        authorId,
+        name,
+      })
+      .pipe(
+        take(1),
+        map((l) => new List(l))
+      );
+  }
+
+  async getListById(id) {
+    return this.http
+      .get<List>(this.rootUrl + `list/${id}`)
+      .pipe(
+        take(1),
+        map((l) => new List(l))
+      )
+  }
+
+  async getProductById(id) {
+    return this.http
+      .get<Product>(this.rootUrl + `product/${id}`)
+      .pipe(
+        take(1),
+        map((p) => new Product(p))
+      )
   }
 }

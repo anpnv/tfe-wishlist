@@ -12,9 +12,10 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 import { CreateListComponent } from './components/create-list/create-list.component';
+import { ProductLineComponent } from './components/product-line/product-line.component';
 
 @NgModule({
-  declarations: [AppComponent, CreateListComponent],
+  declarations: [AppComponent, CreateListComponent, ProductLineComponent],
   entryComponents: [],
   imports: [
     BrowserModule,

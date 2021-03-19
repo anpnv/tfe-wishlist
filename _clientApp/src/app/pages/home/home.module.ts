@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
+import { ProductLineComponent } from 'src/app/components/product-line/product-line.component';
 
 @NgModule({
   imports: [
@@ -14,8 +15,8 @@ import { HomePage } from './home.page';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  declarations: [HomePage]
+  declarations: [HomePage, ProductLineComponent]
 })
 export class HomePageModule {}

@@ -1,3 +1,12 @@
 ion-card {
     height: 45%;
 }
+ion-card-content {
+    max-height: calc(100% - #{50px});
+    position: relative;
+    overflow: hidden;
+    overflow-y: auto;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }

@@ -27,6 +27,7 @@ export class AuthService {
   ) {
     const data = JSON.parse(sessionStorage.getItem('currentUser'));
     this.currentUser = data ? new User(data) : null;
+
     this.handleRedirect();
   }
 
@@ -97,28 +98,27 @@ export class AuthService {
     this.currentUser = null;
   }
 
-  setToken(email: string) {
+  async setToken(email: string) {
     if (email) {
-      this.db.getUserByemail(email).then(async (usr) => {
+      await this.db.getUserByemail(email).then((usr) => {
         sessionStorage.setItem('currentUser', JSON.stringify(usr));
         this.currentUser = usr;
       });
-
     }
   }
 
   async googleLogin() {
     const loading = await this.loadingCtrl.create({
       spinner: 'bubbles',
-      message: 'Création de compte en cours...',
+      message: 'Connexion en cours...',
     });
     loading.present();
-    cfaSignIn('google.com').subscribe((res) => {
+    cfaSignIn('google.com').subscribe(async (res) => {
       const { email, displayName, uid } = res;
-      this.db
+       this.db
         .signUpWithProvider(email, displayName, uid)
-        .then((usr) => {
-          if (usr) this.setToken(email);
+        .then(async () => {
+          await this.setToken(email);
         })
         .then(() => {
           loading.dismiss().then(() => {
@@ -131,15 +131,15 @@ export class AuthService {
   async facebookLogin() {
     const loading = await this.loadingCtrl.create({
       spinner: 'bubbles',
-      message: 'Création de compte en cours...',
+      message: 'Connexion en cours...',
     });
     loading.present();
-    cfaSignIn('facebook.com').subscribe((res) => {
-      const { email, displayName, uid } = res;
-      this.db
+    cfaSignIn('facebook.com').subscribe(async  (res) => {
+      const { email, displayName, uid } =  res;
+      await this.db
         .signUpWithProvider(email, displayName, uid)
-        .then((usr) => {
-          if (usr) this.setToken(email);
+        .then(async () => {
+          await this.setToken(email);
         })
         .then(() => {
           loading.dismiss().then(() => {
