@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import * as admin from "firebase-admin";
+import { firestore } from "firebase-admin";
 import { List } from "../models/list";
 
 const _db = admin.firestore();
@@ -10,16 +11,26 @@ export async function all(req: Request, res: Response) {
     const userQuerySnapshot = await _collection.get();
     let lists: List[] = [];
     userQuerySnapshot.forEach((doc) => {
+      const {
+        isPublic,
+        date,
+        pot,
+        authorId,
+        isEnable,
+        name,
+        messages,
+        products,
+      } = doc.data();
       lists.push({
         id: doc.id,
-        isPublic: doc.data().isPublic,
-        date: doc.data().date,
-        pot: doc.data().pot,
-        authorId: doc.data().authorId,
-        isEnable: doc.data().isEnable,
-        name: doc.data().name,
-        messages: doc.data().name,
-        products: doc.data().products,
+        isPublic: isPublic,
+        date: date,
+        pot: pot,
+        authorId: authorId,
+        isEnable: isEnable,
+        name: name,
+        messages: messages,
+        products: products,
       });
     });
     return res.status(200).send(lists);
@@ -31,16 +42,17 @@ export async function all(req: Request, res: Response) {
 export async function participateToPot(req: Request, res: Response) {
   try {
     const { id, pot } = req.body;
-    _collection.doc(id).set({
-      pot: pot
-    }, {merge: true})
+    _collection.doc(id).set(
+      {
+        pot: pot,
+      },
+      { merge: true }
+    );
     return res.status(202).send(true);
   } catch (err) {
     return handleError(res, err);
   }
 }
-
-
 
 export async function create(req: Request, res: Response) {
   try {
@@ -55,11 +67,11 @@ export async function create(req: Request, res: Response) {
       products: [],
       messages: [],
     };
-    await _collection.add(newList).then(async(doc) => {
+    await _collection.add(newList).then(async (doc) => {
       await doc.set({ id: doc.id }, { merge: true });
-      await doc.get().then(async elem => {
+      await doc.get().then(async (elem) => {
         return await res.status(201).send(elem.data());
-      })
+      });
     });
     return res.status(201).send(true);
   } catch (err) {
@@ -118,6 +130,34 @@ export async function remove(req: Request, res: Response) {
     const { id } = req.params;
     await _collection.doc(id).delete();
     return res.status(204).send(true);
+  } catch (err) {
+    return handleError(res, err);
+  }
+}
+
+export async function addProduct(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const { productId } = req.body;
+    console.log(productId);
+    await _collection.doc(id).update({
+      products: firestore.FieldValue.arrayUnion(productId),
+    });
+    return res.status(200).send(true);
+  } catch (err) {
+    return handleError(res, err);
+  }
+}
+
+export async function removeProduct(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+    const { productId } = req.body;
+
+    await _collection.doc(id).update({
+      products: firestore.FieldValue.arrayRemove(productId),
+    });
+    return res.status(200).send(true);
   } catch (err) {
     return handleError(res, err);
   }

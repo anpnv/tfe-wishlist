@@ -63,8 +63,7 @@ export class DatabaseService {
         email,
         displayName,
         uid,
-      })
-      .subscribe();
+      }).subscribe(user => user);
   }
 
   deleteUser(id): Observable<boolean> {
@@ -92,20 +91,40 @@ export class DatabaseService {
   }
 
   async getListById(id) {
-    return this.http
-      .get<List>(this.rootUrl + `list/${id}`)
-      .pipe(
-        take(1),
-        map((l) => new List(l))
-      )
+    return this.http.get<List>(this.rootUrl + `list/${id}`).pipe(
+      take(1),
+      map((l) => new List(l))
+    );
   }
 
   async getProductById(id) {
+    return this.http.get<Product>(this.rootUrl + `product/${id}`).pipe(
+      take(1),
+      map((p) => new Product(p))
+    );
+  }
+
+  addProduct(listId, productId) {
     return this.http
-      .get<Product>(this.rootUrl + `product/${id}`)
+      .put<Boolean>(this.rootUrl + 'list/addProduct/' + listId, { productId })
       .pipe(
-        take(1),
-        map((p) => new Product(p))
-      )
+        map((res) => true),
+        catchError((err) => {
+          console.log(err);
+          return of(false);
+        })
+      );
+  }
+
+  removeProduct(listId, productId) {
+    return this.http
+      .put<Boolean>(this.rootUrl + 'list/removeProduct/' + listId, { productId })
+      .pipe(
+        map((res) => true),
+        catchError((err) => {
+          console.log(err);
+          return of(false);
+        })
+      );
   }
 }

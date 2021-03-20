@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Product } from 'src/app/classes/product';
 import { DatabaseService } from 'src/app/services/database.service';
@@ -11,7 +11,14 @@ import { DatabaseService } from 'src/app/services/database.service';
 export class ProductLineComponent implements OnInit {
 
   @Input() id: string;
+  @Input() listId: string;
+
+
+  @Output() delete =  new EventEmitter<void>();
+
   product: any;
+
+
 
   
   constructor(private db: DatabaseService) { }
@@ -20,8 +27,16 @@ export class ProductLineComponent implements OnInit {
     this.product = await  this.db.getProductById(this.id);
   }
 
-  open(){
-    console.log(this.id);
+  onDeleteClick(){
+    this.db.removeProduct(this.listId, this.id).subscribe(() => {
+      this.delete.emit();
+    });
   }
+
+  onOpenClick(){
+    console.log("open here modal for update prod");
+  }
+
+
 
 }

@@ -1,19 +1,19 @@
-
 <ion-content>
-
   <ion-card>
     <ion-card-header>
-
       <ion-item lines="none">
         <ion-card-title>Liste privée</ion-card-title>
-        <ion-button fill="outline" slot="end"><ion-icon name="add"></ion-icon></ion-button>
+        <ion-button fill="outline" (click)="add()" slot="end"
+          ><ion-icon name="add"></ion-icon
+        ></ion-button>
       </ion-item>
-      
-     
     </ion-card-header>
     <ion-card-content *ngIf="privateList | async  as list">
+      <ng-container *ngIf="list.products.length === 0">
+          Aucun produit dans votre liste
+      </ng-container> 
       <ion-list *ngFor="let product of list.products">
-        <app-product-line [id]="product"></app-product-line>
+        <app-product-line [id]="product" [listId]="list.id" (delete)="delete()"></app-product-line>
       </ion-list>
     </ion-card-content>
   </ion-card>
@@ -23,11 +23,7 @@
       <ion-card-title>Liste publiques</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-     <img src="../../../assets/img/friends.svg" /> 
+      <img src="../../../assets/img/friends.svg" />
     </ion-card-content>
   </ion-card>
-
-
-
-
 </ion-content>

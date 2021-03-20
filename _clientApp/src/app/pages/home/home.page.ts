@@ -13,14 +13,34 @@ import { DatabaseService } from 'src/app/services/database.service';
 export class HomePage implements OnInit {
 
   privateList: any;
+  
 
   constructor(private db: DatabaseService, private auth: AuthService) {}
 
-  ngOnInit() {
-   this.initPrivateList()
+  async ngOnInit() {
+   await this.initPrivateList();
+   
   }
 
   async initPrivateList() {
+    await this.updateList();
+  }
+
+
+
+  async updateList(){
     this.privateList = await this.db.getListById(this.auth.currentUser.privateList);
+  }
+
+  add(){
+    const id = this.auth.currentUser.privateList;
+    this.db.addProduct(id, "IW9bWGftXfKiOB5At43E").subscribe(() => {
+      this.updateList();
+    });
+  }
+
+
+  async delete(id){
+    await this.updateList();
   }
 }

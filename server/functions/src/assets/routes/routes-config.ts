@@ -22,7 +22,6 @@ export function routesConfig(app: Application) {
   app.delete("/product/:id", productCtrl.remove);
   app.post("/product", productCtrl.create);
   app.put("/product/:id", productCtrl.update);
-  app.put("/product/buy/:id", productCtrl.buyProduct);
 
   // List
   app.get("/lists", listCtrl.all);
@@ -31,6 +30,9 @@ export function routesConfig(app: Application) {
   app.post("/list", listCtrl.create);
   app.post("/participate", listCtrl.participate);
   app.put("/list/:id", listCtrl.update);
+  app.put("/list/addProduct/:id", listCtrl.addProduct);
+  app.put("/list/removeProduct/:id", listCtrl.removeProduct);
+  
 
   app.post('participatePot', listCtrl.participateToPot);
 }

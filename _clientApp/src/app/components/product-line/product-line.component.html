@@ -1,10 +1,21 @@
-<ion-item *ngIf="product | async as p" lines="none" (click)="open()">
+<ion-item *ngIf="product | async as p; else charging" lines="none">
+ 
   <ion-avatar slot="start">
     <img src="../../../assets/img/gift.svg">
   </ion-avatar>
-  <ion-label>
+  <ion-label class="ion-text-wrap">
     <h2>{{p.name}}</h2>
     <h3>{{p.price}} €</h3>
     <p>{{p.details}}</p>
   </ion-label>
+  <ion-icon name="eye" (click)="onOpenClick()">
+  </ion-icon>
+
+    <ion-icon (click)="onDeleteClick()" name="trash" ></ion-icon>
+
+ 
 </ion-item>
+
+<ng-template #charging>
+  <ion-spinner></ion-spinner>
+</ng-template>

@@ -102,15 +102,15 @@ export async function signUp(req: Request, res: Response) {
 export async function signUpWithProvider(req: Request, res: Response) {
   try {
     const { email, displayName, uid } = req.body;
+    var user;
     await _collection
       .doc(uid)
       .get()
       .then(async (doc) => {
-        if (!doc.exists) {
-          let user;
+        if (!doc.exists) {  
           createPrivateList(uid)
             .then((doc) => {
-              user = _collection.doc(uid).set({
+              _collection.doc(uid).set({
                 email: email,
                 uid: uid,
                 displayName: displayName,
@@ -119,7 +119,6 @@ export async function signUpWithProvider(req: Request, res: Response) {
                 privateList: doc.id,
                 publicLists: [],
               });
-              return user;
             })
             .finally(() => {
               admin.auth().updateUser(uid, {
@@ -127,13 +126,13 @@ export async function signUpWithProvider(req: Request, res: Response) {
               });
             });
 
-          return res.status(201).send(user);
-        } else {
-          return res.status(200).send(doc);
+          
         }
+      }).finally(async () => {
+        user = (await (await _collection.doc(uid).get()).data()) as User;
       });
 
-    return res.status(200);
+    return res.status(200).send(user);
   } catch (err) {
     return handleError(res, err);
   }

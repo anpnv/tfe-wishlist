@@ -1,13 +1,11 @@
-import { List } from './list';
-
 export class User {
   uid?: String;
   displayName?: String;
   email?: String;
   birthday?: String;
   token?: String;
-  privateList?: List;
-  publicLists?: List[];
+  privateList?: String;
+  publicLists?: [];
 
   constructor(data: User) {
     const {
