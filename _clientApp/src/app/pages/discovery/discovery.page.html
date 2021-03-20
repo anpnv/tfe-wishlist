@@ -2,33 +2,38 @@
 
   <ion-card>
     <ion-card-header>
-      <ion-card-subtitle>79,99 € </ion-card-subtitle>
-      <ion-card-title>Product 1 </ion-card-title>
+      <ion-item lines="none">
+        <ion-card-title>Ajouté par d'autres..</ion-card-title>
+        <ion-button fill="outline" (click)="show()" slot="end"
+          ><ion-icon name="add"></ion-icon
+        ></ion-button>
+      </ion-item>
     </ion-card-header>
-    <ion-item>
-      <ion-icon name="pin" slot="start"></ion-icon>
-      <ion-label>Add to list</ion-label>
-      <ion-button fill="outline" slot="end">View</ion-button>
-    </ion-item>
-  
-    <ion-card-content>
-      <img src="../../../assets/img/gift.svg"  height="150px"/> 
+    
+    
+
+    <ion-card-content *ngIf="isOpen">
+      <ion-list *ngFor="let product of products">
+        <app-product-line [id]="product.id" [listId]="null" (add)="add()"></app-product-line>
+      </ion-list>
     </ion-card-content>
   </ion-card>
+
+
+
   <ion-card>
     <ion-card-header>
-      <ion-card-subtitle>19,99 € </ion-card-subtitle>
-      <ion-card-title>Product 2 </ion-card-title>
+      <ion-item lines="none">
+        <ion-card-title>Idée..</ion-card-title>
+        <ion-button fill="outline" (click)="show()" slot="end"
+          ><ion-icon name="add"></ion-icon
+        ></ion-button>
+      </ion-item>
     </ion-card-header>
-    <ion-item>
-      <ion-icon name="pin" slot="start"></ion-icon>
-      <ion-label>Add to list</ion-label>
-      <ion-button fill="outline" slot="end">View</ion-button>
-    </ion-item>
-  
-    <ion-card-content>
-      <img src="../../../assets/img/gift.svg"  height="150px"/> 
-    </ion-card-content>
+    <ion-card-content *ngIf="isOpen"> hélloazeazea </ion-card-content>
   </ion-card>
+
+  
+
   
 </ion-content>

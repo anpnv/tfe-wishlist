@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { DiscoveryPageRoutingModule } from './discovery-routing.module';
 
 import { DiscoveryPage } from './discovery.page';
+import { ProductLineComponent } from 'src/app/components/product-line/product-line.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { DiscoveryPage } from './discovery.page';
     IonicModule,
     DiscoveryPageRoutingModule
   ],
-  declarations: [DiscoveryPage]
+  declarations: [DiscoveryPage, ProductLineComponent]
 })
 export class DiscoveryPageModule {}

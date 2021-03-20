@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Product } from 'src/app/classes/product';
+import { AuthService } from 'src/app/services/auth.service';
 import { DatabaseService } from 'src/app/services/database.service';
 
 @Component({
@@ -15,13 +16,15 @@ export class ProductLineComponent implements OnInit {
 
 
   @Output() delete =  new EventEmitter<void>();
+  @Output() add =  new EventEmitter<void>();
 
   product: any;
 
 
 
   
-  constructor(private db: DatabaseService) { }
+  constructor(private db: DatabaseService,
+    private auth : AuthService) { }
 
   async ngOnInit() {
     this.product = await  this.db.getProductById(this.id);
@@ -35,6 +38,13 @@ export class ProductLineComponent implements OnInit {
 
   onOpenClick(){
     console.log("open here modal for update prod");
+  }
+
+  onAddClick(){
+    console.log('clicked')
+;    this.db.addProduct(this.auth.currentUser.privateList, this.id).subscribe(() => {
+      this.add.emit();
+    })
   }
 
 

@@ -11,8 +11,10 @@
   <ion-icon name="eye" (click)="onOpenClick()">
   </ion-icon>
 
-    <ion-icon (click)="onDeleteClick()" name="trash" ></ion-icon>
-
+    <ion-icon *ngIf="listId !== null; else addBtn" (click)="onDeleteClick()" name="trash" ></ion-icon>
+    <ng-template #addBtn>
+      <ion-icon name="add" (click)="onAddClick()"></ion-icon>
+    </ng-template>
  
 </ion-item>
 

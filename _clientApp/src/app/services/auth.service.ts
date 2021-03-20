@@ -38,7 +38,7 @@ export class AuthService {
   }
 
   redirectHome() {
-    return this.navCtrl.navigateForward('/tabs/home');
+    return this.navCtrl.navigateForward('/tabs/discovery');
   }
 
   async uid() {

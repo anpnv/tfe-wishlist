@@ -20,6 +20,11 @@ export class DatabaseService {
       .pipe(map((res) => res.map((u) => new User(u))));
   }
 
+  getProducts(){
+    return this.http.get<Product[]>(this.rootUrl+'products')
+    .pipe(map((res)=> res.map((p) => new Product(p))));
+  }
+
   getOneUser(id: string) {
     this.http
       .get<User>(this.rootUrl + `user/${id}`)

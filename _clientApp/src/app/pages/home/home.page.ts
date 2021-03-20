@@ -17,10 +17,17 @@ export class HomePage implements OnInit {
 
   constructor(private db: DatabaseService, private auth: AuthService) {}
 
-  async ngOnInit() {
-   await this.initPrivateList();
-   
+   ngOnInit() {
+    this.initPrivateList();
   }
+
+
+  
+  ionViewWillEnter(){
+    this.updateList();
+  }
+
+
 
   async initPrivateList() {
     await this.updateList();
