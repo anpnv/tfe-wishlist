@@ -27,7 +27,8 @@ export class ProductLineComponent implements OnInit {
     private auth : AuthService) { }
 
   async ngOnInit() {
-    this.product = await  this.db.getProductById(this.id);
+    console.log(this.id)
+    this.product = await this.db.getProductById(this.id);
   }
 
   onDeleteClick(){

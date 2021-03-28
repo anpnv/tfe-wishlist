@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
+import { DatabaseService } from 'src/app/services/database.service';
 
 @Component({
   selector: 'app-auth',
@@ -23,7 +24,8 @@ export class AuthPage implements OnInit {
     private auth: AngularFireAuth,
     private fb: FormBuilder,
     private modalCtrl: ModalController,
-    private authService: AuthService
+    private authService: AuthService,
+    private db: DatabaseService
   ) {}
 
   ngOnInit() {

@@ -26,8 +26,9 @@ export class AuthService {
     private loadingCtrl: LoadingController
   ) {
     const data = JSON.parse(sessionStorage.getItem('currentUser'));
+    console.log(data);
     this.currentUser = data ? new User(data) : null;
-
+    console.log(this.currentUser);
     this.handleRedirect();
   }
 
@@ -38,7 +39,7 @@ export class AuthService {
   }
 
   redirectHome() {
-    return this.navCtrl.navigateForward('/tabs/discovery');
+    return this.navCtrl.navigateForward('/tabs/home');
   }
 
   async uid() {
@@ -59,13 +60,14 @@ export class AuthService {
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
         const { email } = user.user;
-        this.setToken(email);
+        this.setToken(user.user.uid);
       })
       .then(() => {
         loading.dismiss().then(() => {
           this.redirectHome();
         });
-      }).catch(err => {
+      })
+      .catch((err) => {
         console.log(err);
         loading.dismiss();
       });
@@ -98,11 +100,13 @@ export class AuthService {
     this.currentUser = null;
   }
 
-  async setToken(email: string) {
-    if (email) {
-      await this.db.getUserByemail(email).then((usr) => {
-        sessionStorage.setItem('currentUser', JSON.stringify(usr));
-        this.currentUser = usr;
+  async setToken(uid: string) {
+    if (uid) {
+      (await this.db.getOneUser(uid)).subscribe( (user) => {
+         console.log(user);
+         sessionStorage.setItem('currentUser', JSON.stringify(user));
+        this.currentUser = user;
+        
       });
     }
   }
@@ -115,15 +119,20 @@ export class AuthService {
     loading.present();
     cfaSignIn('google.com').subscribe(async (res) => {
       const { email, displayName, uid } = res;
-       this.db
+      await this.db
         .signUpWithProvider(email, displayName, uid)
         .then(async () => {
-          await this.setToken(email);
+          await setTimeout(() => {
+            this.setToken(uid);
+          }, 1500)
         })
         .then(() => {
-          loading.dismiss().then(() => {
-            this.redirectHome();
-          });
+          setTimeout(() => {
+          loading.dismiss().then( async () =>  {
+            if (this.currentUser) 
+            this.redirectHome()
+          })
+          }, 2000); 
         });
     });
   }
@@ -134,12 +143,12 @@ export class AuthService {
       message: 'Connexion en cours...',
     });
     loading.present();
-    cfaSignIn('facebook.com').subscribe(async  (res) => {
-      const { email, displayName, uid } =  res;
+    cfaSignIn('facebook.com').subscribe(async (res) => {
+      const { email, displayName, uid } = res;
       await this.db
         .signUpWithProvider(email, displayName, uid)
         .then(async () => {
-          await this.setToken(email);
+          await this.setToken(uid);
         })
         .then(() => {
           loading.dismiss().then(() => {

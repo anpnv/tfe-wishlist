@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../classes/User';
-import { map, take, catchError } from 'rxjs/operators';
+import { map, take, catchError, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { List } from '../classes/list';
 import { Product } from '../classes/product';
@@ -25,25 +25,25 @@ export class DatabaseService {
     .pipe(map((res)=> res.map((p) => new Product(p))));
   }
 
-  getOneUser(id: string) {
-    this.http
-      .get<User>(this.rootUrl + `user/${id}`)
+  async getOneUser(uid: String) {
+   return this.http.get<User>(this.rootUrl + `user/${uid}`)
       .pipe(
-        take(1),
-        map((u) => new User(u))
-      )
-      .toPromise();
+        tap(
+          data => (data), // new Product(data)
+          error => console.log("error", error)
+        )
+      );
   }
 
-  getUserByemail(email: string) {
-    return this.http
-      .get<User>(this.rootUrl + `user/getByEmail/${email}`)
-      .pipe(
-        take(1),
-        map((u) => new User(u))
+  async getListById(id) {
+    this.http.get<List>(this.rootUrl + `list/${id}`)
+    .pipe(
+      tap(
+        data => new List(data),
+        error => console.log("error", error)
       )
-      .toPromise();
-  }
+    ).subscribe()
+  };
 
   async signUp(email, password, displayName) {
     return await this.http
@@ -63,12 +63,12 @@ export class DatabaseService {
   }
 
   async signUpWithProvider(email, displayName, uid) {
-    return await this.http
+    return this.http
       .post<User>(this.rootUrl + 'user/signUpProvider', {
         email,
         displayName,
         uid,
-      }).subscribe(user => user);
+      }).subscribe();
   }
 
   deleteUser(id): Observable<boolean> {
@@ -95,19 +95,17 @@ export class DatabaseService {
       );
   }
 
-  async getListById(id) {
-    return this.http.get<List>(this.rootUrl + `list/${id}`).pipe(
-      take(1),
-      map((l) => new List(l))
-    );
-  }
+  
+
 
   async getProductById(id) {
     return this.http.get<Product>(this.rootUrl + `product/${id}`).pipe(
-      take(1),
-      map((p) => new Product(p))
-    );
-  }
+      tap(
+        data => console.log(data), // new Product(data)
+        error => console.log("error", error)
+      )
+    )
+  };
 
   addProduct(listId, productId) {
     return this.http

@@ -45,11 +45,10 @@ export async function get(req: Request, res: Response) {
   }
 }
 
-export async function getUserByEmail(req: Request, res: Response) {
+export async function getUserById(req: Request, res: Response) {
   try {
-    const { email } = req.params;
-    const uid = (await admin.auth().getUserByEmail(email)).uid;
-    const user = (await (await _collection.doc(uid).get()).data()) as User;
+    const { uid } = req.params;
+    const user = (await _collection.doc(uid).get()).data();
     return res.status(200).send(user);
   } catch (err) {
     return handleError(res, err);
@@ -90,6 +89,7 @@ export async function signUp(req: Request, res: Response) {
           privateList: doc.id,
           publicLists: [],
           token: "",
+          participations: [],
         });
       });
       return res.status(201).send(user);
@@ -107,8 +107,8 @@ export async function signUpWithProvider(req: Request, res: Response) {
       .doc(uid)
       .get()
       .then(async (doc) => {
-        if (!doc.exists) {  
-          createPrivateList(uid)
+        if (!doc.exists) {
+          await createPrivateList(uid)
             .then((doc) => {
               _collection.doc(uid).set({
                 email: email,
@@ -118,18 +118,19 @@ export async function signUpWithProvider(req: Request, res: Response) {
                 birthday: "",
                 privateList: doc.id,
                 publicLists: [],
+                participations: [],
               });
             })
-            .finally(() => {
-              admin.auth().updateUser(uid, {
+            .finally(async () => {
+              await admin.auth().updateUser(uid, {
                 emailVerified: true,
               });
             });
-
-          
         }
-      }).finally(async () => {
-        user = (await (await _collection.doc(uid).get()).data()) as User;
+      })
+      .finally(async () => {
+        const user1 = (await (await _collection.doc(uid).get()).data()) as User;
+        return res.status(200).send(user1);
       });
 
     return res.status(200).send(user);

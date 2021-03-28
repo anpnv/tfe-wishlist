@@ -9,8 +9,8 @@ export function routesConfig(app: Application) {
   });
 
   // User
-  app.get("/user/:id", userCtrl.get);
-  app.get("/user/getByEmail/:email", userCtrl.getUserByEmail);
+  app.get("/user/:uid", userCtrl.get);
+  app.get("/user/getByUid/:uid", userCtrl.getUserById);
   app.delete("/user/:id", userCtrl.remove);
   app.put("/user/:id", userCtrl.update);
   app.post("/user/signUp", userCtrl.signUp);

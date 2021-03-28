@@ -53,9 +53,8 @@ export class CreateListComponent implements OnInit {
       name: name,
     };
 
-    this.db.createList(list).subscribe( async elem => {
-      console.log(await elem)
-    });
+    this.db.createList(list).subscribe();
+
     this.dismiss();
   }
 }

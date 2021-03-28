@@ -69,6 +69,17 @@ export async function create(req: Request, res: Response) {
     };
     await _collection.add(newList).then(async (doc) => {
       await doc.set({ id: doc.id }, { merge: true });
+
+      await _db
+        .collection("users")
+        .doc(authorId)
+        .set(
+          {
+            publicLists: firestore.FieldValue.arrayUnion(doc.id),
+          },
+          { merge: true }
+        );
+
       await doc.get().then(async (elem) => {
         return await res.status(201).send(elem.data());
       });

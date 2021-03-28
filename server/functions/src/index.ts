@@ -1,15 +1,12 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import * as express from "express";
-
 admin.initializeApp(functions.config().firebase);
-
 import * as cors from "cors";
 import * as bodyParser from "body-parser";
 import { routesConfig } from "./assets/routes/routes-config";
 const db = admin.firestore();
 db.settings({ ignoreUndefinedProperties: true });
-
 const app = express();
 app.use(bodyParser.json());
 app.use(cors({ origin: true }));
@@ -22,8 +19,6 @@ app.use(function (req, res, next) {
   );
   next();
 });
-
 routesConfig(app);
-
 export const api = functions.region("europe-west1").https.onRequest(app);
 
