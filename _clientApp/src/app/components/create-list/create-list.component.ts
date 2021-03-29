@@ -24,7 +24,7 @@ export class CreateListComponent implements OnInit {
     private fb: FormBuilder,
     private db: DatabaseService,
     private auth: AuthService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.initForm();
@@ -53,7 +53,9 @@ export class CreateListComponent implements OnInit {
       name: name,
     };
 
-    this.db.createList(list).subscribe();
+    this.db.createList(list).subscribe(l => {
+      this.auth.currentUser.publicLists.push(l.id);
+    });
 
     this.dismiss();
   }

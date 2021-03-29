@@ -23,9 +23,10 @@ export class HomePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.initPrivateList();
+    this.auth.updateCurrentUser();
     const uid = (this.auth.currentUser.uid);
     this.db.getOneUser(uid);
+    
   }
 
   ionViewWillEnter() {

@@ -8,4 +8,5 @@ export interface List {
   name: string;
   products: [];
   messages: [];
+  participants:[];
 }

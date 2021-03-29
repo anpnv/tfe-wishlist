@@ -36,13 +36,13 @@ export class DatabaseService {
   }
 
   async getListById(id) {
-    this.http.get<List>(this.rootUrl + `list/${id}`)
+    return this.http.get<List>(this.rootUrl + `list/${id}`)
     .pipe(
       tap(
         data => new List(data),
         error => console.log("error", error)
       )
-    ).subscribe()
+    )
   };
 
   async signUp(email, password, displayName) {
@@ -101,7 +101,7 @@ export class DatabaseService {
   async getProductById(id) {
     return this.http.get<Product>(this.rootUrl + `product/${id}`).pipe(
       tap(
-        data => console.log(data), // new Product(data)
+        data => new Product(data), // new Product(data)
         error => console.log("error", error)
       )
     )

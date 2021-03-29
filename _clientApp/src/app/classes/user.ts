@@ -5,7 +5,7 @@ export class User {
   birthday?: String;
   token?: String;
   privateList?: String;
-  publicLists?: [];
+  publicLists?: String[];
 
   constructor(data: User) {
     const {

@@ -26,9 +26,7 @@ export class AuthService {
     private loadingCtrl: LoadingController
   ) {
     const data = JSON.parse(sessionStorage.getItem('currentUser'));
-    console.log(data);
     this.currentUser = data ? new User(data) : null;
-    console.log(this.currentUser);
     this.handleRedirect();
   }
 
@@ -36,6 +34,10 @@ export class AuthService {
     if (this.currentUser) {
       this.redirectHome();
     }
+  }
+
+  updateCurrentUser(){
+    this.setToken(this.currentUser.uid);
   }
 
   redirectHome() {
@@ -100,10 +102,9 @@ export class AuthService {
     this.currentUser = null;
   }
 
-  async setToken(uid: string) {
+  async setToken(uid) {
     if (uid) {
       (await this.db.getOneUser(uid)).subscribe( (user) => {
-         console.log(user);
          sessionStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUser = user;
         

@@ -19,6 +19,7 @@ export async function all(req: Request, res: Response) {
         isEnable,
         name,
         messages,
+        participants,
         products,
       } = doc.data();
       lists.push({
@@ -31,6 +32,7 @@ export async function all(req: Request, res: Response) {
         name: name,
         messages: messages,
         products: products,
+        participants: participants,
       });
     });
     return res.status(200).send(lists);
@@ -66,6 +68,7 @@ export async function create(req: Request, res: Response) {
       name: name,
       products: [],
       messages: [],
+      participants: [],
     };
     await _collection.add(newList).then(async (doc) => {
       await doc.set({ id: doc.id }, { merge: true });
