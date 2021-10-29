@@ -1,3 +1,5 @@
+# NOT FINISHED, PROJECT STOPPED SINCE 29 MARCH 2021 
+
 ## Travail de fin d'étude EPFC 20-21
 
 ##  Wishlist
